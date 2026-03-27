@@ -7,13 +7,13 @@ import os
 # CONFIG
 # =========================
 st.set_page_config(
-    page_title="AI Fraud Detection",
+    page_title="AI Fraud Detection Indonesia",
     page_icon="🛡️",
     layout="centered"
 )
 
 # =========================
-# CUSTOM CSS (BIAR KEREN 🔥)
+# CUSTOM CSS
 # =========================
 st.markdown("""
 <style>
@@ -57,7 +57,7 @@ vectorizer_email = pickle.load(open(os.path.join(BASE_DIR, 'model/vectorizer_ema
 vectorizer_sms = pickle.load(open(os.path.join(BASE_DIR, 'model/vectorizer_sms.pkl'), 'rb'))
 
 # =========================
-# FEATURE URL
+# URL FEATURE
 # =========================
 def extract_features(url):
     return np.array([[
@@ -71,27 +71,82 @@ def extract_features(url):
 # SIDEBAR
 # =========================
 st.sidebar.title("🛡️ Fraud Detection")
-menu = st.sidebar.radio("Pilih Menu", ["Deteksi", "Tentang"])
+menu = st.sidebar.radio("Pilih Menu", ["🏠 Beranda", "🔍 Deteksi", "ℹ️ Tentang"])
 
 # =========================
-# HALAMAN UTAMA
+# 🏠 BERANDA
 # =========================
-if menu == "Deteksi":
+if menu == "🏠 Beranda":
 
     st.title("🛡️ AI Fraud Detection Indonesia")
-    st.caption("Deteksi Email, SMS, dan URL Penipuan dengan AI")
+
+    st.image("assets/cyber security illustration.png", use_container_width=True)
+
+    st.subheader("Lindungi diri dari penipuan digital dengan AI")
+
+    st.markdown("""
+Selamat datang di sistem **deteksi penipuan berbasis Artificial Intelligence**.
+
+Aplikasi ini membantu kamu mengenali:
+- 📧 Email penipuan  
+- 💬 SMS scam  
+- 🔗 Link phishing  
+
+Gunakan teknologi AI untuk menjaga keamanan digital kamu 🚀
+""")
 
     st.divider()
 
+    # FEATURE CARDS
+    col1, col2, col3 = st.columns(3)
+
+    with col1:
+        st.image("assets/fraud detection illustration.jpg")
+        st.markdown("### 📧 Email")
+        st.info("Deteksi email penipuan")
+
+    with col2:
+        st.image("assets/phishing warning illustration.png")
+        st.markdown("### 💬 SMS")
+        st.info("Deteksi SMS scam")
+
+    with col3:
+        st.image("assets/phishing warning illustration.png")
+        st.markdown("### 🔗 URL")
+        st.info("Deteksi phishing link")
+
+    st.divider()
+
+    st.subheader("📊 Kenapa Ini Penting?")
+    st.markdown("""
+Penipuan digital semakin meningkat setiap tahun.
+
+Banyak korban terjadi karena:
+- kurangnya edukasi
+- link palsu
+- pesan hadiah palsu
+
+Dengan aplikasi ini, kamu bisa:
+- menghindari penipuan  
+- melindungi data pribadi  
+- meningkatkan kesadaran digital  
+""")
+
+    st.success("🚀 Lindungi diri kamu mulai sekarang!")
+
+# =========================
+# 🔍 DETEKSI
+# =========================
+elif menu == "🔍 Deteksi":
+
+    st.title("🔍 Deteksi Penipuan")
+
     option = st.selectbox(
-        "🔍 Pilih Jenis Deteksi",
+        "Pilih Jenis",
         ["📧 Email", "💬 SMS", "🔗 URL"]
     )
 
-    user_input = st.text_area(
-        "✍️ Masukkan teks / URL",
-        placeholder="Contoh: Selamat! Anda mendapatkan hadiah..."
-    )
+    user_input = st.text_area("Masukkan teks / URL")
 
     if st.button("🚀 Cek Sekarang"):
 
@@ -118,9 +173,6 @@ if menu == "Deteksi":
 
             st.divider()
 
-            # =========================
-            # RESULT CARD
-            # =========================
             if pred == 1:
                 st.markdown(f"""
                 <div class="result-box fraud">
@@ -137,9 +189,9 @@ if menu == "Deteksi":
                 """, unsafe_allow_html=True)
 
 # =========================
-# HALAMAN TENTANG
+# ℹ️ TENTANG
 # =========================
-elif menu == "Tentang":
+elif menu == "ℹ️ Tentang":
 
     st.title("ℹ️ Tentang Aplikasi")
 
@@ -150,7 +202,7 @@ Aplikasi ini adalah sistem **AI Fraud Detection** yang mampu mendeteksi:
 - 💬 SMS Penipuan  
 - 🔗 Phishing URL  
 
-Dibuat menggunakan Machine Learning untuk membantu masyarakat menghindari penipuan digital di Indonesia.
+Dibuat untuk membantu masyarakat Indonesia menghindari penipuan digital.
 """)
 
     st.subheader("💡 Tips Keamanan")
@@ -158,7 +210,7 @@ Dibuat menggunakan Machine Learning untuk membantu masyarakat menghindari penipu
 - Jangan klik link mencurigakan  
 - Jangan bagikan OTP atau password  
 - Periksa domain website dengan teliti  
-- Hindari tawaran yang terlalu menggiurkan  
+- Waspadai penawaran yang terlalu bagus  
 """)
 
 # =========================
