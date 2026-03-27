@@ -2,15 +2,28 @@ import streamlit as st
 import pickle
 import numpy as np
 
-# Load models
-model_email = pickle.load(open('model/model_email.pkl', 'rb'))
-model_sms = pickle.load(open('model/model_sms.pkl', 'rb'))
-model_url = pickle.load(open('model/model_phishing.pkl', 'rb'))
+# =========================
+# CONFIG
+# =========================
+st.set_page_config(
+    page_title="AI Fraud Detection Indonesia",
+    page_icon="🛡️",
+    layout="centered"
+)
 
-vectorizer_email = pickle.load(open('model/vectorizer_email.pkl', 'rb'))
-vectorizer_sms = pickle.load(open('model/vectorizer_sms.pkl', 'rb'))
+# =========================
+# LOAD MODEL
+# =========================
+model_email = pickle.load(open('model_email.pkl', 'rb'))
+model_sms = pickle.load(open('model_sms.pkl', 'rb'))
+model_url = pickle.load(open('model_phishing.pkl', 'rb'))
 
-# URL feature
+vectorizer_email = pickle.load(open('vectorizer_email.pkl', 'rb'))
+vectorizer_sms = pickle.load(open('vectorizer_sms.pkl', 'rb'))
+
+# =========================
+# URL FEATURE
+# =========================
 def extract_features(url):
     return np.array([[
         len(url),
@@ -19,38 +32,95 @@ def extract_features(url):
         int('https' in url)
     ]])
 
-# UI
-st.title("🔥 AI Fraud Detection Indonesia")
+# =========================
+# HEADER
+# =========================
+st.title("🛡️ AI Fraud Detection Indonesia")
+st.markdown("Deteksi **Email Scam**, **SMS Penipuan**, dan **Phishing URL** secara otomatis menggunakan AI")
 
-option = st.selectbox("Pilih Jenis Deteksi", ["Email", "SMS", "URL"])
+st.divider()
 
-user_input = st.text_area("Masukkan teks / URL")
+# =========================
+# MENU PILIHAN
+# =========================
+option = st.selectbox(
+    "🔍 Pilih Jenis Deteksi",
+    ["📧 Email", "💬 SMS", "🔗 URL"]
+)
 
-if st.button("Cek Sekarang"):
+user_input = st.text_area(
+    "✍️ Masukkan teks / URL",
+    placeholder="Contoh: Anda mendapatkan hadiah 10 juta..."
+)
 
-    if option == "Email":
-        vec = vectorizer_email.transform([user_input])
-        pred = model_email.predict(vec)[0]
+# =========================
+# BUTTON
+# =========================
+if st.button("🚀 Cek Sekarang"):
 
-        if pred == 1:
-            st.error("🚨 Spam Email")
-        else:
-            st.success("✅ Email Aman")
+    if not user_input.strip():
+        st.warning("⚠️ Input tidak boleh kosong!")
+    else:
 
-    elif option == "SMS":
-        vec = vectorizer_sms.transform([user_input])
-        pred = model_sms.predict(vec)[0]
+        # EMAIL
+        if option == "📧 Email":
+            vec = vectorizer_email.transform([user_input])
+            pred = model_email.predict(vec)[0]
 
-        if pred == 1:
-            st.error("🚨 SMS Spam")
-        else:
-            st.success("✅ SMS Aman")
+            if pred == 1:
+                st.error("🚨 Email terdeteksi sebagai SPAM / PENIPUAN")
+            else:
+                st.success("✅ Email Aman")
 
-    elif option == "URL":
-        features = extract_features(user_input)
-        pred = model_url.predict(features)[0]
+        # SMS
+        elif option == "💬 SMS":
+            vec = vectorizer_sms.transform([user_input])
+            pred = model_sms.predict(vec)[0]
 
-        if pred == 1:
-            st.error("🚨 Phishing URL")
-        else:
-            st.success("✅ URL Aman")
+            if pred == 1:
+                st.error("🚨 SMS terdeteksi sebagai PENIPUAN")
+            else:
+                st.success("✅ SMS Aman")
+
+        # URL
+        elif option == "🔗 URL":
+            features = extract_features(user_input)
+            pred = model_url.predict(features)[0]
+
+            if pred == 1:
+                st.error("🚨 URL terdeteksi sebagai PHISHING")
+            else:
+                st.success("✅ URL Aman")
+
+# =========================
+# INFO SECTION
+# =========================
+st.divider()
+
+st.subheader("ℹ️ Tentang Aplikasi")
+st.markdown("""
+Aplikasi ini menggunakan Machine Learning untuk mendeteksi potensi penipuan digital di Indonesia:
+
+- 📧 Email Scam Detection  
+- 💬 SMS Fraud Detection  
+- 🔗 Phishing URL Detection  
+
+Tujuan: membantu pengguna menghindari penipuan online.
+""")
+
+# =========================
+# TIPS KEAMANAN
+# =========================
+st.subheader("💡 Tips Menghindari Penipuan")
+st.markdown("""
+- Jangan klik link mencurigakan  
+- Jangan bagikan OTP atau password  
+- Cek alamat website dengan teliti  
+- Hindari penawaran yang terlalu bagus untuk dipercaya  
+""")
+
+# =========================
+# FOOTER
+# =========================
+st.divider()
+st.caption("🚀 Dibuat dengan AI oleh kamu | Project Fraud Detection Indonesia")
