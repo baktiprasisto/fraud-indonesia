@@ -101,17 +101,17 @@ Gunakan teknologi AI untuk menjaga keamanan digital kamu 🚀
     col1, col2, col3 = st.columns(3)
 
     with col1:
-        st.image("assets/fraud detection illustration.jpg")
+        st.image("assets/email.png")
         st.markdown("### 📧 Email")
         st.info("Deteksi email penipuan")
 
     with col2:
-        st.image("assets/phishing warning illustration.png")
+        st.image("assets/sms.png")
         st.markdown("### 💬 SMS")
         st.info("Deteksi SMS scam")
 
     with col3:
-        st.image("assets/phishing warning illustration.png")
+        st.image("assets/url.png")
         st.markdown("### 🔗 URL")
         st.info("Deteksi phishing link")
 
