@@ -68,7 +68,7 @@ Each detection system uses a different approach:
 ## 🌐 Live Demo
 
 👉 If you want to try the app, you can access it here:  
-*(Add your Streamlit link here)*
+[*(Add your Streamlit link here)*](https://baktiprasisto-fraud-indonesia-app-streamlit-tojgmd.streamlit.app/#url)
 
 ---
 
